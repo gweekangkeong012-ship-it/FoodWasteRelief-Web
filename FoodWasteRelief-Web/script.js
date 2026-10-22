@@ -169,15 +169,19 @@ if (form) {
 let map = null;
 let markersLayer = null;
 
+// Initialize Leaflet Map globally
+let map = null;
+let markersLayer = null;
+
 function initLiveMap() {
     const mapContainer = document.getElementById('live-leaflet-map');
     if (!mapContainer) return;
 
-    // If map hasn't been initialized yet, center it around APU / Bukit Jalil area
+    // Initialize map centered on APU / Bukit Jalil area if not already initialized
     if (!map) {
         map = L.map('live-leaflet-map').setView([3.0480, 101.6918], 13);
         
-        // Add free OpenStreetMap tiles
+        // Free OpenStreetMap tiles
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '© OpenStreetMap contributors'
@@ -186,10 +190,10 @@ function initLiveMap() {
         markersLayer = L.layerGroup().addTo(map);
     }
 
-    // Clear existing markers before re-rendering
+    // Clear previous markers
     markersLayer.clearLayers();
 
-    // Approximate coordinates mapping for your project locations
+    // Location coordinates mapping
     const locationCoords = {
         "Bukit Jalil": [3.0543, 101.6915],
         "Sri Petaling": [3.0673, 101.6913],
@@ -198,29 +202,37 @@ function initLiveMap() {
         "Seri Kembangan": [3.0203, 101.7056]
     };
 
-    // Loop through current requests and add pins dynamically
-    requests.forEach(req => {
-        // Fallback coordinates if location name isn't exact
+    // Filter to ONLY ACTIVE requests (Fulfilled items disappear)
+    const activeRequests = requests.filter(req => req.status === 'Active');
+
+    // Add map markers for active requests
+    activeRequests.forEach(req => {
+        // Fallback coordinates if location name isn't matched
         let coords = locationCoords[req.location.trim()] || [3.0480, 101.6918];
         
-        // Active pins are red/emerald, fulfilled pins are greyed out
-        const isFulfilled = req.status === 'Fulfilled';
-        const pinColor = isFulfilled ? '#94a3b8' : '#e11d48'; // Grey for fulfilled, Rose for active
+        // Assign color based on urgency level
+        let pinColor = '#38bdf8'; // Low Urgency: Light Blue
+        if (req.urgency === 'High') {
+            pinColor = '#e11d48'; // High Urgency: Rose/Red
+        } else if (req.urgency === 'Medium') {
+            pinColor = '#f59e0b'; // Medium Urgency: Amber/Orange
+        }
 
-        // Create custom HTML marker dot
+        // Custom marker pin with urgency color
         const customIcon = L.divIcon({
             className: 'custom-map-pin',
-            html: `<div style="background-color: ${pinColor}; width: 14px; height: 14px; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.3);"></div>`,
-            iconSize: [14, 14],
-            iconAnchor: [7, 7]
+            html: `<div style="background-color: ${pinColor}; width: 16px; height: 16px; border-radius: 50%; border: 2.5px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.35); cursor: pointer;"></div>`,
+            iconSize: [16, 16],
+            iconAnchor: [8, 8]
         });
 
-        // Add marker with a popup showing details
+        // Add marker with details popup
         const marker = L.marker(coords, { icon: customIcon }).bindPopup(`
-            <div style="font-family: sans-serif; font-size: 11px;">
-                <strong>${req.org}</strong><br>
-                <span>Item: ${req.item}</span><br>
-                <span>Status: <b>${req.status}</b></span>
+            <div style="font-family: sans-serif; font-size: 11px; padding: 2px;">
+                <strong style="color: #0f172a; font-size: 12px;">${req.org}</strong><br>
+                <span style="color: #64748b;">${req.location}</span><br>
+                <div style="margin-top: 4px;"><b>Need:</b> ${req.item}</div>
+                <div style="margin-top: 2px;"><b>Urgency:</b> <span style="color: ${pinColor}; font-weight: bold;">${req.urgency}</span></div>
             </div>
         `);
 
