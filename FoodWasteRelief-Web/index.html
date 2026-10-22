@@ -93,62 +93,55 @@
             </div>
         </section>
 
-        <!-- 10-Mile APU Radius Map Container -->
-<div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between h-full">
-    <div>
-        <!-- Card Header -->
-        <div class="flex items-center justify-between mb-2">
-            <h3 class="text-lg font-bold text-slate-900 flex items-center">
-                <i class="fa-solid fa-map-location-dot text-emerald-600 mr-2"></i> 10-Mile APU Radius Map
-            </h3>
-            <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Live View</span>
-        </div>
-        <p class="text-xs text-slate-500 mb-4">
-            Monitoring participating beneficiary homes & campuses within a 10-mile radius of APU Bukit Jalil[cite: 7].
-        </p>
+        <!-- Map & Tracker Section -->
+        <section id="map-section" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- 10-Mile APU Radius Map Container -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between">
+                <div>
+                    <!-- Card Header -->
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-lg font-bold text-slate-900 flex items-center">
+                            <i class="fa-solid fa-map-location-dot text-emerald-600 mr-2"></i> 10-Mile APU Radius Map
+                        </h3>
+                        <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Live View</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mb-4">
+                        Monitoring participating beneficiary homes & campuses within a 10-mile radius of APU Bukit Jalil[cite: 7].
+                    </p>
 
-        <!-- Quick Location Filter Chips -->
-        <div class="flex flex-wrap gap-1.5 mb-3 text-[11px] font-medium">
-            <a href="https://maps.google.com/?q=Asia+Pacific+University+APU" target="_blank" class="px-2.5 py-1 bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-600 rounded-md transition flex items-center gap-1 border border-slate-200">
-                <i class="fa-solid fa-graduation-cap text-xs text-emerald-600"></i> APU Campus
-            </a>
-            <a href="https://maps.google.com/?q=Bukit+Jalil+Kuala+Lumpur" target="_blank" class="px-2.5 py-1 bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-600 rounded-md transition flex items-center gap-1 border border-slate-200">
-                <i class="fa-solid fa-location-dot text-xs text-rose-500"></i> Bukit Jalil
-            </a>
-            <a href="https://maps.google.com/?q=Sri+Petaling+Kuala+Lumpur" target="_blank" class="px-2.5 py-1 bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-600 rounded-md transition flex items-center gap-1 border border-slate-200">
-                <i class="fa-solid fa-location-dot text-xs text-rose-500"></i> Sri Petaling
-            </a>
-        </div>
+                    <!-- Quick Location Filter Chips -->
+                    <div class="flex flex-wrap gap-1.5 mb-3 text-[11px] font-medium">
+                        <a href="https://maps.google.com/?q=Asia+Pacific+University+APU" target="_blank" class="px-2.5 py-1 bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-600 rounded-md transition flex items-center gap-1 border border-slate-200">
+                            <i class="fa-solid fa-graduation-cap text-xs text-emerald-600"></i> APU Campus
+                        </a>
+                        <a href="https://maps.google.com/?q=Bukit+Jalil+Kuala+Lumpur" target="_blank" class="px-2.5 py-1 bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-600 rounded-md transition flex items-center gap-1 border border-slate-200">
+                            <i class="fa-solid fa-location-dot text-xs text-rose-500"></i> Bukit Jalil
+                        </a>
+                        <a href="https://maps.google.com/?q=Sri+Petaling+Kuala+Lumpur" target="_blank" class="px-2.5 py-1 bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-600 rounded-md transition flex items-center gap-1 border border-slate-200">
+                            <i class="fa-solid fa-location-dot text-xs text-rose-500"></i> Sri Petaling
+                        </a>
+                    </div>
 
-        <!-- Live Interactive Map Container -->
-        <div id="live-leaflet-map" class="w-full h-64 md:h-72 rounded-lg overflow-hidden border border-slate-200 shadow-inner z-10"></div>
-    </div>
+                    <!-- Live Interactive Map Container -->
+                    <div id="live-leaflet-map" class="w-full h-64 md:h-72 rounded-lg overflow-hidden border border-slate-200 shadow-inner z-10"></div>
+                </div>
 
-    <!-- Map Legend & Note -->
-    <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500 flex-wrap gap-2">
-        <div class="flex items-center space-x-2 sm:space-x-3">
-            <span class="flex items-center gap-1 font-semibold text-slate-700">
-                <span class="w-2.5 h-2.5 rounded-full bg-rose-600 inline-block shadow-sm"></span> High Urgency
-            </span>
-            <span class="flex items-center gap-1 font-semibold text-slate-700">
-                <span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block shadow-sm"></span> Medium
-            </span>
-            <span class="flex items-center gap-1 font-semibold text-slate-700">
-                <span class="w-2.5 h-2.5 rounded-full bg-sky-500 inline-block shadow-sm"></span> Low
-            </span>
-        </div>
-        <span class="text-[10px] text-emerald-700 font-medium bg-emerald-50 px-2 py-0.5 rounded">Active Pin Only</span>
-    </div>
-
-        <!-- Location Case Count Summary -->
-<div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 mb-6">
-    <h3 class="text-sm font-bold text-slate-900 mb-3 flex items-center gap-2">
-        <i class="fa-solid fa-chart-pie text-emerald-600"></i> Cases by Location Summary
-    </h3>
-    <div id="location-summary-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 text-xs">
-        <!-- Dynamically injected via JavaScript -->
-    </div>
-</div>
+                <!-- Map Legend & Note -->
+                <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500 flex-wrap gap-2">
+                    <div class="flex items-center space-x-2 sm:space-x-3">
+                        <span class="flex items-center gap-1 font-semibold text-slate-700">
+                            <span class="w-2.5 h-2.5 rounded-full bg-rose-600 inline-block shadow-sm"></span> High Urgency
+                        </span>
+                        <span class="flex items-center gap-1 font-semibold text-slate-700">
+                            <span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block shadow-sm"></span> Medium
+                        </span>
+                        <span class="flex items-center gap-1 font-semibold text-slate-700">
+                            <span class="w-2.5 h-2.5 rounded-full bg-sky-500 inline-block shadow-sm"></span> Low
+                        </span>
+                    </div>
+                    <span class="text-[10px] text-emerald-700 font-medium bg-emerald-50 px-2 py-0.5 rounded">Active Pin Only</span>
+                </div>
+            </div>
 
             <!-- Tracking Sheet Table with History Tab -->
             <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between">
@@ -191,6 +184,16 @@
                 <p id="table-hint" class="text-xs text-slate-400 mt-4 italic">* Click "Mark Fulfilled" to move items into the Fulfilled History tab.</p>
             </div>
         </section>
+
+        <!-- Location Case Count Summary -->
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+            <h3 class="text-sm font-bold text-slate-900 mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-chart-pie text-emerald-600"></i> Cases by Location Summary
+            </h3>
+            <div id="location-summary-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 text-xs">
+                <!-- Dynamically injected via JavaScript -->
+            </div>
+        </div>
 
         <!-- Intake Form -->
         <section id="form-section" class="bg-white p-8 rounded-xl shadow-sm border border-slate-200 max-w-3xl mx-auto">
@@ -241,8 +244,8 @@
         <p>Food Waste Reduction and Hunger Relief Project | Group 4</p>
     </footer>
 
-    <script src="script.js"></script>
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
