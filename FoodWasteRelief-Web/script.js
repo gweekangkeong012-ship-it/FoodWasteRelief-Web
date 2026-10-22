@@ -61,6 +61,7 @@ function renderTable() {
 
     updateStats();
     updateLocationSummary();
+    initLiveMap();
 }
 
 function switchTab(tab) {
@@ -161,6 +162,69 @@ if (form) {
         switchTab('active');
         this.reset();
         alert('Request successfully submitted and added to Active Requests!');
+    });
+}
+
+// Initialize Leaflet Map globally
+let map = null;
+let markersLayer = null;
+
+function initLiveMap() {
+    const mapContainer = document.getElementById('live-leaflet-map');
+    if (!mapContainer) return;
+
+    // If map hasn't been initialized yet, center it around APU / Bukit Jalil area
+    if (!map) {
+        map = L.map('live-leaflet-map').setView([3.0480, 101.6918], 13);
+        
+        // Add free OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        markersLayer = L.layerGroup().addTo(map);
+    }
+
+    // Clear existing markers before re-rendering
+    markersLayer.clearLayers();
+
+    // Approximate coordinates mapping for your project locations
+    const locationCoords = {
+        "Bukit Jalil": [3.0543, 101.6915],
+        "Sri Petaling": [3.0673, 101.6913],
+        "Taman Connaught": [3.0822, 101.7375],
+        "Sungai Besi": [3.0431, 101.7088],
+        "Seri Kembangan": [3.0203, 101.7056]
+    };
+
+    // Loop through current requests and add pins dynamically
+    requests.forEach(req => {
+        // Fallback coordinates if location name isn't exact
+        let coords = locationCoords[req.location.trim()] || [3.0480, 101.6918];
+        
+        // Active pins are red/emerald, fulfilled pins are greyed out
+        const isFulfilled = req.status === 'Fulfilled';
+        const pinColor = isFulfilled ? '#94a3b8' : '#e11d48'; // Grey for fulfilled, Rose for active
+
+        // Create custom HTML marker dot
+        const customIcon = L.divIcon({
+            className: 'custom-map-pin',
+            html: `<div style="background-color: ${pinColor}; width: 14px; height: 14px; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.3);"></div>`,
+            iconSize: [14, 14],
+            iconAnchor: [7, 7]
+        });
+
+        // Add marker with a popup showing details
+        const marker = L.marker(coords, { icon: customIcon }).bindPopup(`
+            <div style="font-family: sans-serif; font-size: 11px;">
+                <strong>${req.org}</strong><br>
+                <span>Item: ${req.item}</span><br>
+                <span>Status: <b>${req.status}</b></span>
+            </div>
+        `);
+
+        markersLayer.addLayer(marker);
     });
 }
 
