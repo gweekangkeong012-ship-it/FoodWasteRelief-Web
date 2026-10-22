@@ -108,6 +108,35 @@ function updateStats() {
     if (historyCount) historyCount.innerText = fulfilledCount;
 }
 
+function updateLocationSummary() {
+    const summaryContainer = document.getElementById('location-summary-grid');
+    if (!summaryContainer) return;
+
+    // Count cases per location
+    const locationCounts = {};
+    requests.forEach(req => {
+        // Normalize location text (trim spaces)
+        const loc = req.location.trim();
+        locationCounts[loc] = (locationCounts[loc] || 0) + 1;
+    });
+
+    // Generate HTML cards for each location
+    summaryContainer.innerHTML = '';
+    for (const [location, count] of Object.entries(locationCounts)) {
+        const card = document.createElement('div');
+        card.className = "bg-slate-50 border border-slate-200 p-3 rounded-lg flex flex-col justify-between";
+        card.innerHTML = `
+            <span class="font-semibold text-slate-700 truncate" title="${location}">${location}</span>
+            <div class="flex items-baseline justify-between mt-2">
+                <span class="text-emerald-700 font-bold text-base">${count}</span>
+                <span class="text-[10px] text-slate-400">Cases</span>
+            </div>
+        `;
+        summaryContainer.appendChild(card);
+    }
+}
+
+
 const form = document.getElementById('submission-form');
 if (form) {
     form.addEventListener('submit', function(e) {
