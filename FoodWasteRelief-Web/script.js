@@ -88,7 +88,7 @@ function toggleStatus(id) {
     const item = requests.find(r => r.id === id);
     if (item) {
         item.status = item.status === 'Active' ? 'Fulfilled' : 'Active';
-        saveRequests(); // Save change persistent to localStorage
+        saveRequests();
         renderTable();
     }
 }
@@ -114,15 +114,12 @@ function updateLocationSummary() {
     const summaryContainer = document.getElementById('location-summary-grid');
     if (!summaryContainer) return;
 
-    // Count cases per location
     const locationCounts = {};
     requests.forEach(req => {
-        // Normalize location text (trim spaces)
         const loc = req.location.trim();
         locationCounts[loc] = (locationCounts[loc] || 0) + 1;
     });
 
-    // Generate HTML cards for each location
     summaryContainer.innerHTML = '';
     for (const [location, count] of Object.entries(locationCounts)) {
         const card = document.createElement('div');
@@ -137,7 +134,6 @@ function updateLocationSummary() {
         summaryContainer.appendChild(card);
     }
 }
-
 
 const form = document.getElementById('submission-form');
 if (form) {
@@ -157,7 +153,7 @@ if (form) {
             status: "Active"
         });
 
-        saveRequests(); // Save newly added request to localStorage
+        saveRequests();
         currentTab = 'active';
         switchTab('active');
         this.reset();
@@ -165,11 +161,7 @@ if (form) {
     });
 }
 
-// Initialize Leaflet Map globally
-let map = null;
-let markersLayer = null;
-
-// Initialize Leaflet Map globally
+// Initialize Leaflet Map globally (Single declaration)
 let map = null;
 let markersLayer = null;
 
@@ -177,11 +169,9 @@ function initLiveMap() {
     const mapContainer = document.getElementById('live-leaflet-map');
     if (!mapContainer) return;
 
-    // Initialize map centered on APU / Bukit Jalil area if not already initialized
     if (!map) {
         map = L.map('live-leaflet-map').setView([3.0480, 101.6918], 13);
         
-        // Free OpenStreetMap tiles
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '© OpenStreetMap contributors'
@@ -190,10 +180,8 @@ function initLiveMap() {
         markersLayer = L.layerGroup().addTo(map);
     }
 
-    // Clear previous markers
     markersLayer.clearLayers();
 
-    // Location coordinates mapping
     const locationCoords = {
         "Bukit Jalil": [3.0543, 101.6915],
         "Sri Petaling": [3.0673, 101.6913],
@@ -202,23 +190,18 @@ function initLiveMap() {
         "Seri Kembangan": [3.0203, 101.7056]
     };
 
-    // Filter to ONLY ACTIVE requests (Fulfilled items disappear)
     const activeRequests = requests.filter(req => req.status === 'Active');
 
-    // Add map markers for active requests
     activeRequests.forEach(req => {
-        // Fallback coordinates if location name isn't matched
         let coords = locationCoords[req.location.trim()] || [3.0480, 101.6918];
         
-        // Assign color based on urgency level
-        let pinColor = '#38bdf8'; // Low Urgency: Light Blue
+        let pinColor = '#38bdf8'; 
         if (req.urgency === 'High') {
-            pinColor = '#e11d48'; // High Urgency: Rose/Red
+            pinColor = '#e11d48'; 
         } else if (req.urgency === 'Medium') {
-            pinColor = '#f59e0b'; // Medium Urgency: Amber/Orange
+            pinColor = '#f59e0b'; 
         }
 
-        // Custom marker pin with urgency color
         const customIcon = L.divIcon({
             className: 'custom-map-pin',
             html: `<div style="background-color: ${pinColor}; width: 16px; height: 16px; border-radius: 50%; border: 2.5px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.35); cursor: pointer;"></div>`,
@@ -226,7 +209,6 @@ function initLiveMap() {
             iconAnchor: [8, 8]
         });
 
-        // Add marker with details popup
         const marker = L.marker(coords, { icon: customIcon }).bindPopup(`
             <div style="font-family: sans-serif; font-size: 11px; padding: 2px;">
                 <strong style="color: #0f172a; font-size: 12px;">${req.org}</strong><br>
