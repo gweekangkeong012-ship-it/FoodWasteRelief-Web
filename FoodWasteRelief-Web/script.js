@@ -60,6 +60,7 @@ function renderTable() {
     }
 
     updateStats();
+    updateLocationSummary();
 }
 
 function switchTab(tab) {
